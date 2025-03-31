@@ -6,6 +6,52 @@
 
 using namespace std;
 
+long long find_1(long long x,long long k){
+    long long ans=x;
+//找到x二进制下最高位的1
+    for(int i=60;i>=0;i--){
+        if(ans<=0||k<=0){
+            break;
+        }
+        if(x>>i&1){
+            long long tmp=1;
+            tmp<<=i;
+//            cout<<tmp<<endl;
+            ans-=tmp;
+            k--;
+        }
+    }
+    if(k>0){
+        //找最低位的0，改成1
+        for(int i=0;i<=60;i++){
+            if(k<=0){
+                break;
+            }
+            if(!(x>>i&1)){
+                long long tmp=1;
+                tmp<<=i;
+                ans+=tmp;
+                k--;
+            }
+        }
+    }
+    return ans;
+}
+
+//long long find_2(long long x,long long k){
+//    long long ans=x;
+//    while(ans>0&&k>0){
+//        for(int i=60;i>=0;i--){
+//            if(x>>i&1){
+//                long long tmp=1;
+//                tmp<<=i;
+//                ans=ans&(~tmp);
+//                k--;
+//            }
+//        }
+//    }
+//    return ans;
+//}
 
 void try1(){
     int T;
@@ -13,46 +59,13 @@ void try1(){
     long long x,k;
     while(T--){
         cin>>x>>k;
-        long long ans=x;
-        long long t=1;
-        //找到x二进制下最高位的1
-        while(t<=x){
-            t<<=1;
-        }
-        t>>=1;
-
-        while(ans>0&&k>0){
-            //找到x二进制下最高位的1
-//            cout<<ans<<endl;
-//            cout<<"t:"<<t<<endl;
-            ans=ans&(~t);
-//            cout<<"ans:"<<ans<<endl;
-            while(!(t&x)){
-                t>>=1;
-            }
-            t>>=1;
-            k--;
-        }
-        t=1;
-//        cout<<k<<endl;
-        if(k>0){
-            while(k>0){
-                //找最低位的0，改成1
-                while(t&x){
-                    t<<=1;
-                }
-//                cout<<k<<endl;
-                ans|=t;
-                t<<=1;
-                k--;
-            }
-        }
+        long long ans=find_1(x,k);
         cout<<ans<<endl;
     }
 }
 int main(){
     freopen("data.in","r",stdin);
-
+    try1();
     fclose(stdin);
     return 0;
 }
