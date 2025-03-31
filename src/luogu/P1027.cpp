@@ -16,29 +16,37 @@ struct Node{
 
 int ecnt=0;
 int head[10000];
-void add_edge(int from,int to,int cost){
+void add_edge(int from,int to,int dis,int cost){
     e[ecnt].from=from;
     e[ecnt].to=to;
-    e[ecnt].cost=cost;
+    e[ecnt].cost=cost*dis;
     e[ecnt].next=head[from];
     head[from]=ecnt++;
 }
 
-void add_highway(Node* nodes,int n){
-    for(int i=0;i<n;i++){
-        for(int j=i+1;j<n;j++){
-            int cost = pow(nodes[i].x-nodes[j].x,2)+pow(nodes[i].y-nodes[j].y,2);
-            add_edge(i,j,cost);
-            add_edge(j,i,cost);
-        }
-    }
-}
 
 
 int main(){
     int n;
     scanf("%d",&n);
+    int s,t,a,b;
+    int x1,y1,x2,y2,x3,y3,r_c;
+    Node city[100][4];
     for(int i=0;i<n;i++){
+        scanf("%d%d%d%d",&s,&t,&a,&b);
+        for(int j=0;j<s;j++){
+            scanf("%d%d%d%d%d%d%d",&x1,&y1,&x2,&y2,&x3,&y3,&r_c);
+            
+            //添加边
+            for(int k=0;k<4;k++){
+                for(int l=0;l<4;l++){
+                    if(k!=l){
+                        add_edge(i*4+k,i*4+l,sqrt(pow(city[i][k].x-city[i][l].x,2)+pow(city[i][k].y-city[i][l].y,2)),r_c);
+                    }
+                }
+            }
+        }
+        //city之间的边
 
     }
 }
