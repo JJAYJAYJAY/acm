@@ -26,7 +26,7 @@ bool is_right(const vector<int>& a, int k, int x) {
 
 int calc(const vector<int>& a, int k) {
     int mex = get_mex(a);
-    int l = 0, r = mex;
+    int l = 0, r = mex+1;
     int ans = 0;
     while (l <= r) {
         int mid = (l + r) / 2;
@@ -50,7 +50,11 @@ void solve() {
         int n, k;
         cin >> n >> k;
         vector<int> a(n);
-        for (int i = 0; i < n; i++) cin >> a[i];
+        int maxx=0;
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+            maxx=max(maxx,a[i]);
+        }
         cout << calc(a, k) << '\n';
     }
 }
