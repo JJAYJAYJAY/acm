@@ -1,28 +1,8 @@
 #include <iostream>
-
+#include "vector"
 using namespace std;
 int t;
 
-bool check(const string& p, const string& s, int i, int j) {
-    if (i == p.size() && j == s.size()) {
-        return true;
-    }
-    if (i >= p.size() || j >= s.size()) {
-        return false;
-    }
-    if (p[i] != s[j]) {
-        return false;
-    }
-    if (check(p, s, i + 1, j + 1)) {
-        return true;
-    }
-    if (j + 1 < s.size() && s[j + 1] == p[i]) {
-        if (check(p, s, i + 1, j + 2)) {
-            return true;
-        }
-    }
-    return false;
-}
 
 void solve() {
     cin>>t;
@@ -33,12 +13,47 @@ void solve() {
             cout<<"NO"<<endl;
             continue;
         }
-        if(check(p, s, 0, 0)){
-            cout<<"YES"<<endl;
-            continue;
-        }else{
+        if(s[0]!=p[0]){
             cout<<"NO"<<endl;
             continue;
+        }
+
+        int j=0,i=0;
+        vector<int> a;
+        int cnt;
+        while(i<p.length()){
+            cnt = 1;
+            while(p[i]==p[i+1] && i+1<p.length()){
+                i++;
+                cnt++;
+            }
+            a.push_back(cnt);
+            i++;
+        }
+//        a.push_back(cnt);
+        vector<int> b;
+        while(j<s.length()){
+            cnt = 1;
+            while(s[j]==s[j+1] && j+1<s.length()){
+                j++;
+                cnt++;
+            }
+            b.push_back(cnt);
+            j++;
+        }
+        if(a.size()!=b.size()){
+            cout<<"NO"<<endl;
+            continue;
+        }
+        for(int i=0;i<a.size();i++){
+//            cout<<a[i]<<" " << b[i] <<endl;
+            if(b[i]<a[i]||b[i]>2*a[i]){
+                cout<<"NO"<<endl;
+                break;
+            }
+            if(i == a.size()-1){
+                cout<<"YES"<<endl;
+            }
         }
     }
 }
