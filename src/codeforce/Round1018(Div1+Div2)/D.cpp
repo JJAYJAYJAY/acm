@@ -1,8 +1,13 @@
 #include <iostream>
 #include <vector>
+#include<map>
+#include<set>
 using namespace std;
 
 int main() {
+#ifdef LOCAL
+    freopen("src/codeforce/Round1018(Div1+Div2)/in/D.in", "r", stdin);
+#endif
     ios::sync_with_stdio(false);
     cin.tie(0);
 
@@ -11,62 +16,31 @@ int main() {
     while (t--) {
         int n;
         cin >> n;
+        map<int,set<int>> mp;
+        map<int,set<int>> mp2;
         vector<pair<int, int>> points(n);
         for (int i = 0; i < n; ++i) {
-            cin >> points[i].first >> points[i].second;
+            int x,y;
+            cin>>x>>y;
+            mp[x].insert(y);
+            mp2[x+y].insert(x);
         }
-
-        int total_xor = 0;
-        for (auto [x, y] : points) {
-            int xp = (x % 2 + 2) % 2;
-            int yp = (y % 2 + 2) % 2;
-            int code = (xp << 1) | yp;
-            total_xor ^= code;
+        int ans_x;
+        for(auto item:mp){
+            if(item.second.size()%2==1){
+                ans_x=item.first;
+                break;
+            }
         }
-
-        int sp = (total_xor >> 1) & 1;
-        int tp = total_xor & 1;
-
-        pair<int, int> ans;
-        bool found = false;
-        for (auto [x, y] : points) {
-            int xp = (x % 2 + 2) % 2;
-            int yp = (y % 2 + 2) % 2;
-            if (xp == sp && yp == tp) {
-                ans = {x, y};
-                found = true;
+        int ans_b;
+        for(auto item:mp2){
+            if(item.second.size()%2==1){
+                ans_b=item.first;
                 break;
             }
         }
 
-        if (!found) {
-            int x = points[0].first;
-            int y = points[0].second;
-            int xp = (x % 2 + 2) % 2;
-            int yp = (y % 2 + 2) % 2;
-
-            int dx = (sp - xp) % 2;
-            if (dx < 0) dx += 2;
-            int dy = (tp - yp) % 2;
-            if (dy < 0) dy += 2;
-
-            // Adjust dx and dy to prefer negative increments when applicable
-            if (dx == 1 && xp == 1) {
-                dx = -1;
-            } else {
-                dx = dx;
-            }
-
-            if (dy == 1 && yp == 1) {
-                dy = -1;
-            } else {
-                dy = dy;
-            }
-
-            ans = {x + dx, y + dy};
-        }
-
-        cout << ans.first << " " << ans.second << "\n";
+        cout<<ans_x<<" "<<-ans_x+ans_b<<endl;
     }
 
     return 0;
