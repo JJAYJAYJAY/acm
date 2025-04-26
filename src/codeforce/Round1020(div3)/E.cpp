@@ -3,39 +3,27 @@
 #include "vector"
 using namespace std;
 
-//找到数组中第一个比他小的数字
-int find_min(vector<int> &p,int x){
-    int l=0,r=p.size()-1;
-
-
-    return l;
-}
 
 void solve() {
     int n, q;
     cin >> n >> q;
     vector<int> p(n);
-    set<pair<int,int>> s;
+    vector<int> pos(n+1);
     for (int i = 0; i < n; ++i) {
         cin >> p[i];
+        pos[p[i]] = i;
     }
 
     while (q--) {
         int l, r, k;
         cin >> l >> r >> k;
         l--, r--;
-        int target_idx=-1;
-        for(int i=l;i<=r;i++){
-            if(p[i]==k){
-                target_idx=i;
-            }
-        }
-        if(target_idx==-1){
+        if(pos[k]<l||pos[k]>r){
             cout<<-1<<" ";
             continue;
         }
+        int target_idx=pos[k];
 
-        //构造路径
         vector<int> path;
         while(l<=r){
             int mid = (l+r)/2;
@@ -50,30 +38,39 @@ void solve() {
                 }
             }
         }
-        int ans = -1e9;
         int small_cnt=0;
         int big_cnt=0;
+        int all_small=0;
+        int all_big=0;
+        int nee_change=0;
         for(int i=0;i<path.size()-1;i++){
             if(p[path[i]]<k){
                 if(path[i+1]<path[i]){
-                   ans = max(ans,path[i]);
-                   big_cnt++;
+                    all_big++;
+                    small_cnt--;
+                    nee_change++;
+                    big_cnt++;
                 }else{
+                    all_small++;
                     continue;
                 }
             }else{
                 if(path[i+1]>path[i]){
-                    ans = max(ans,path[i]);
+                    all_small++;
+                    big_cnt--;
+                    nee_change++;
                     small_cnt++;
                 }else{
+                    all_big++;
                     continue;
                 }
             }
         }
-        if(ans==-1e9){
-            cout<<0<<" ";
+        if(all_small>k-1||all_big>n-k){
+            cout<<-1<<" ";
+            continue;
         }else{
-            cout<<ans<<" ";
+            cout<<max(0,big_cnt)+max(0,small_cnt)+nee_change<<" ";
         }
     }
     cout<<endl;
@@ -84,7 +81,7 @@ int main() {
     freopen("src/codeforce/Round1020(div3)/in/E.in", "r", stdin);
 #endif
     ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+    cin.tie(0);cout.tie(0);
     int work = 1;
     cin>>work;
     while (work--) {

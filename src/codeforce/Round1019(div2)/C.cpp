@@ -32,15 +32,15 @@ void solve() {
             b.push_back(a[i]+b[i-1]);
         }
         int p=1;
-        for(int i=1+z;i<n+z;i++){
+        for(int i=1;i<n;i++){
             if(b[p]>=0){
-                if(b[i]-b[p]>=0||b[n]-b[i]>=0){
+                if((p<i&&b[i]-b[p]>=0)||(p<i && b[n]-b[i]>=0)){
                     cout<<"YES"<<endl;
                     return;
                 }
             }
             if(b[i]>=0){
-                if(b[i]<(b[p]<0?0x3f3f3f3f:b[p])) p=i;
+                if(b[i]<(b[p]<0?1e9:b[p])) p=i;
             }
         }
 
