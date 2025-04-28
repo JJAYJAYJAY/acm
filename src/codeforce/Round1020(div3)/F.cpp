@@ -9,22 +9,18 @@ void solve() {
     int n;
     string s;
     cin >> n >> s;
-    vector<pair<pair<int,int>,long long>> last;
+    vector<long long> a(n+1,0),b(n+1,0);
     long long mx=-1e9;
-    for(int i=0;i<n;i++){
-        for(int j=0;j<n;j++){
-            int t = s[j]-'0';
-
-            if(i==j){
-                t^=1;
-            }
-            if(t==1){
-
-            }else{
-
-            }
+    s.insert(0," ");
+    for(int i=1;i<=n;i++){
+        if(s[i]=='1'){
+            a[i]=b[i-1]+1;
+        }else{
+            b[i]=b[i-1]+(n-i);
+            a[i]=a[i-1]+(i-1);
         }
-
+        mx = max(mx,max(a[i],b[i]));
+//        cout<<a[i]<<" "<<b[i]<<endl;
     }
     if(mx==-1e9) {
         cout << 0 << endl;
