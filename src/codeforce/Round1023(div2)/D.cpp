@@ -14,12 +14,11 @@ struct T {
 };
 
 vector<vector<int>> g;
-vector<char> rm, vis, f;
+vector<char> rm, vis;
 vector<int> dis, fa;
-vector<int> f_clr;
 
-T get(int s, vector<int>& comp) {
-    comp.clear();
+T get(int s) {
+    vector<int> comp;
     queue<int> q;
     q.push(s);
     vis[s] = 1;
@@ -71,7 +70,6 @@ void init(int n){
     g.assign(n + 1, {});
     rm.assign(n + 1, 0);
     vis.assign(n + 1, 0);
-    f.assign(n + 1, 0);
     dis.assign(n + 1, 0);
     fa.assign(n + 1, -1);
 }
@@ -88,9 +86,8 @@ void solve() {
     }
 
     priority_queue<T> pq;
-    vector<int> comp;
 
-    pq.push(get(1, comp));
+    pq.push(get(1));
     vector<int> ans;
     ans.reserve(3 * n);
 
@@ -101,20 +98,14 @@ void solve() {
         ans.push_back(t.v);
         for (int x : t.p) rm[x] = 1;
 
-        f_clr.clear();
         for (int x : t.p) {
             for (int y : g[x]) {
-                if (!rm[y] && !f[y]) {
-                    T nt = get(y, comp);
+                if (!rm[y]) {
+                    T nt = get(y);
                     pq.push(nt);
-                    for (int z : comp) {
-                        f[z] = 1;
-                        f_clr.push_back(z);
-                    }
                 }
             }
         }
-        for (int z : f_clr) f[z] = 0;
     }
 
     for (int i = 0; i < ans.size(); ++i)
